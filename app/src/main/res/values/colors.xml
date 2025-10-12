@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Colores específicos del Login -->
+    <color name="login_background">#3B5998</color> <!-- Azul principal del fondo -->
+    <color name="login_form_background">#E8EAF6</color> <!-- Color claro para inputs y botón -->
+    <color name="login_form_text">#8A8A8A</color> <!-- Color del texto de placeholder -->
+    <color name="login_button_text">#3B5998</color> <!-- Color del texto del botón -->
+    <color name="login_welcome_text">#FFFFFF</color> <!-- Color del texto "Bienvenido" -->
+    <color name="app_primary_color">#305F82</color>
+
+
+</resources>

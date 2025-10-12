@@ -1,0 +1,69 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Grupo para el botón de limpiar filtros -->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all"
+            android:title="Todos"
+            android:checked="true"/>
+    </group>
+
+    <!-- Grupo para los filtros de carrera -->
+    <item android:title="CARRERA">
+        <menu>
+            <item
+                android:id="@+id/nav_career_apsti"
+                android:title="APSTI"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_career_contabilidad"
+                android:title="Contabilidad"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_career_construccion"
+                android:title="Construcción Civil"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_career_mecatronica"
+                android:title="Mecatrónica"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_career_electricidad"
+                android:title="Electricidad"
+                android:checkable="true" />
+        </menu>
+    </item>
+
+    <!-- Grupo para los filtros de período -->
+    <item android:title="PERIODO">
+        <menu>
+            <!-- (IDs corregidos para evitar duplicados) -->
+            <item
+                android:id="@+id/nav_periodo_I"
+                android:title="I"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_periodo_II"
+                android:title="II"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_periodo_III"
+                android:title="III"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_periodo_IV"
+                android:title="IV"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_periodo_V"
+                android:title="V"
+                android:checkable="true" />
+            <item
+                android:id="@+id/nav_periodo_VI"
+                android:title="VI"
+                android:checkable="true" />
+        </menu>
+    </item>
+
+</menu>
+

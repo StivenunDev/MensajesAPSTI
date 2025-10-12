@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Color de fondo del elemento -->
+    <solid android:color="@color/login_form_background" />
+
+    <!-- Bordes redondeados -->
+    <corners android:radius="12dp" />
+
+</shape>
