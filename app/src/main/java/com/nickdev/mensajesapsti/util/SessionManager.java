@@ -11,6 +11,7 @@ public class SessionManager {
     private final SharedPreferences prefs;
     private final SharedPreferences.Editor editor;
 
+
     public SessionManager(Context context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();

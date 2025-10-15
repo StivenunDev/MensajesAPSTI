@@ -73,12 +73,23 @@ public class MainViewModel extends ViewModel {
         List<Estudiante> currentList = students.getValue();
         if (currentList != null) {
             for (Estudiante student : currentList) {
-                student.establecerSeleccionado(select);
+                student.SelectEstudiante(select);
             }
             // Notificamos a la UI que los datos han cambiado para que los checkboxes se actualicen
             students.setValue(new ArrayList<>(currentList));
         }
     }
+
+    public ArrayList<Estudiante> getSelectedStudents() {
+        ArrayList<Estudiante> selected = new ArrayList<>();
+        for (Estudiante student : allStudents) {
+            if (student.estaSeleccionado()) {
+                selected.add(student);
+            }
+        }
+        return selected;
+    }
+
 
     // El método central que aplica toda la lógica de filtrado
     public void applyFilters() {
@@ -88,9 +99,9 @@ public class MainViewModel extends ViewModel {
         // Usamos un bucle 'for' que es 100% compatible y robusto
         for (Estudiante student : allStudents) {
             // Un estudiante pasa el filtro si cumple TODAS las condiciones
-            boolean careerMatch = selectedCareers.isEmpty() || selectedCareers.contains(student.obtenerCarrera());
-            boolean periodMatch = selectedPeriods.isEmpty() || selectedPeriods.contains(student.obtenerPeriodo());
-            boolean searchMatch = searchQuery.isEmpty() || student.obtenerNombreCompleto().toLowerCase().contains(searchQuery);
+            boolean careerMatch = selectedCareers.isEmpty() || selectedCareers.contains(student.getCarrera());
+            boolean periodMatch = selectedPeriods.isEmpty() || selectedPeriods.contains(student.getPeriodo());
+            boolean searchMatch = searchQuery.isEmpty() || student.getNombreCompleto().toLowerCase().contains(searchQuery);
 
             if (careerMatch && periodMatch && searchMatch) {
                 filteredList.add(student);

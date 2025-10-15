@@ -3,17 +3,12 @@ package com.nickdev.mensajesapsti.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.nickdev.mensajesapsti.R;
 import com.nickdev.mensajesapsti.data.model.Estudiante;
 import com.nickdev.mensajesapsti.databinding.ItemEstudianteBinding;
 
@@ -32,7 +27,12 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     }
 
     public void setStudents(List<Estudiante> students) {
-        this.studentList = students;
+        if (students == null) {
+            this.studentList.clear();
+        } else {
+            this.studentList.clear();
+            this.studentList.addAll(students);
+        }
         notifyDataSetChanged();
     }
 
@@ -73,16 +73,16 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
 
         // El método bind ahora recibe el listener y se encarga de toda la lógica.
         public void bind(final Estudiante student, final OnItemClickListener listener) {
-            binding.studentNameTextView.setText(student.obtenerNombreCompleto());
+            binding.studentNameTextView.setText(student.getNombreCompleto());
 
             // Tu lógica para el checkbox está muy bien.
             // Para evitar que el listener se dispare al reciclar vistas, lo ponemos a null primero.
             binding.studentCheckbox.setOnCheckedChangeListener(null);
-            binding.studentCheckbox.setChecked(student.estaSeleccionado());
+            binding.studentCheckbox.setChecked(student.EstudienteisSelect());
 
             // Actualiza el estado del estudiante cuando se hace clic en el checkbox
             binding.studentCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                student.establecerSeleccionado(isChecked);
+                student.SelectEstudiante(isChecked);
             });
 
             // CORRECCIÓN: El listener del clic se configura aquí, donde tiene acceso a todo.

@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.nickdev.mensajesapsti.util.SessionManager;
 
@@ -17,8 +16,6 @@ public class LoginViewModel extends AndroidViewModel {
 
     // LiveData para el resultado del login (true si fue exitoso)
     private final MutableLiveData<Boolean> _loginResult = new MutableLiveData<>();
-
-
     // LiveData para el estado de carga (true si está cargando)
     private final MutableLiveData<Boolean> _isLoading = new MutableLiveData<>();
     public final LiveData<Boolean> isLoading = _isLoading;
@@ -26,7 +23,6 @@ public class LoginViewModel extends AndroidViewModel {
     // LiveData para los mensajes de error
     private final MutableLiveData<String> _errorMessage = new MutableLiveData<>();
     public final LiveData<String> errorMessage = _errorMessage;
-
     private final SessionManager sessionManager;
 
     public LoginViewModel(Application application) {
@@ -70,6 +66,6 @@ public class LoginViewModel extends AndroidViewModel {
             }
             // 4. Finalizar el estado de carga
             _isLoading.setValue(false);
-        }, 1500);
+        }, 1000);
     }
 }

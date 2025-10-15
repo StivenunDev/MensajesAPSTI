@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ public class DialogoDetalle extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,24 +63,41 @@ public class DialogoDetalle extends DialogFragment {
     }
 
     private void populateUI() {
-        binding.studentNameText.setText(student.obtenerNombreCompleto());
-        binding.studentEmailText.setText(student.obtenerCorreoElectronico());
-        binding.studentPhoneText.setText(student.obtenerTelefono());
-        String careerAndPeriod = student.obtenerCarrera() + " - " + student.obtenerPeriodo();
+        binding.studentNameText.setText(student.getNombreCompleto());
+        binding.studentEmailText.setText(student.getEmail());
+        binding.studentPhoneText.setText(student.getTelefono());
+        String careerAndPeriod = student.getCarrera() + " - " + student.getPeriodo();
         binding.studentCareerText.setText(careerAndPeriod);
     }
 
     private void copyStudentInfoToClipboard() {
-        String info = "Nombre: " + student.obtenerNombreCompleto() + "\n" +
-                "Email: " + student.obtenerCorreoElectronico() + "\n" +
-                "Teléfono: " + student.obtenerTelefono() + "\n" +
-                "Carrera: " + student.obtenerCarrera() + " - " + student.obtenerPeriodo();
+        String info = "Nombre: " + student.getNombreCompleto() + "\n" +
+                "Email: " + student.getEmail() + "\n" +
+                "Teléfono: " + student.getTelefono() + "\n" +
+                "Carrera: " + student.getCarrera() + " - " + student.getPeriodo();
 
         ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("student_info", info);
         if (clipboard != null) {
             clipboard.setPrimaryClip(clip);
             Toast.makeText(getContext(), "Información copiada al portapapeles", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // MÉTODO AÑADIDO PARA AJUSTAR EL TAMAÑO
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams params = window.getAttributes();
+            // Establecer el ancho para que ocupe casi toda la pantalla
+            params.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+            // Quitar el fondo por defecto para que los bordes redondeados se vean bien
+            window.setBackgroundDrawableResource(android.R.color.transparent);
         }
     }
 }
