@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@id/logoImageView" />
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/txtEmail"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/welcomeTextView" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/txtPassword"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
@@ -60,12 +60,12 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:textColorHint="@color/login_form_text"
-        app:layout_constraintEnd_toEndOf="@id/emailEditText"
-        app:layout_constraintStart_toStartOf="@id/emailEditText"
-        app:layout_constraintTop_toBottomOf="@id/emailEditText" />
+        app:layout_constraintEnd_toEndOf="@id/txtEmail"
+        app:layout_constraintStart_toStartOf="@id/txtEmail"
+        app:layout_constraintTop_toBottomOf="@id/txtEmail" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/btnLogin"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
@@ -75,12 +75,12 @@
         android:textSize="28sp"
         android:textStyle="bold"
         app:cornerRadius="12dp"
-        app:layout_constraintEnd_toEndOf="@id/passwordEditText"
-        app:layout_constraintStart_toStartOf="@id/passwordEditText"
-        app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
+        app:layout_constraintEnd_toEndOf="@id/txtPassword"
+        app:layout_constraintStart_toStartOf="@id/txtPassword"
+        app:layout_constraintTop_toBottomOf="@id/txtPassword" />
 
     <TextView
-        android:id="@+id/forgotPasswordTextView"
+        android:id="@+id/lblOlvidoContraseña"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -89,7 +89,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginButton" />
+        app:layout_constraintTop_toBottomOf="@id/btnLogin" />
 
     <TextView
         android:id="@+id/textView"

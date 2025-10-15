@@ -60,18 +60,18 @@ public class DialogoDetalle extends DialogFragment {
     }
 
     private void populateUI() {
-        binding.studentNameText.setText(student.obtenerNombreCompleto());
-        binding.studentEmailText.setText(student.obtenerCorreoElectronico());
-        binding.studentPhoneText.setText(student.obtenerTelefono());
-        String careerAndPeriod = student.obtenerCarrera() + " - " + student.obtenerPeriodo();
+        binding.studentNameText.setText(student.getNombreCompleto());
+        binding.studentEmailText.setText(student.getEmail());
+        binding.studentPhoneText.setText(student.getTelefono());
+        String careerAndPeriod = student.getCarrera() + " - " + student.getPeriodo();
         binding.studentCareerText.setText(careerAndPeriod);
     }
 
     private void copyStudentInfoToClipboard() {
-        String info = "Nombre: " + student.obtenerNombreCompleto() + "\n" +
-                "Email: " + student.obtenerCorreoElectronico() + "\n" +
-                "Teléfono: " + student.obtenerTelefono() + "\n" +
-                "Carrera: " + student.obtenerCarrera() + " - " + student.obtenerPeriodo();
+        String info = "Nombre: " + student.getNombreCompleto() + "\n" +
+                "Email: " + student.getEmail() + "\n" +
+                "Teléfono: " + student.getTelefono() + "\n" +
+                "Carrera: " + student.getCarrera() + " - " + student.getPeriodo();
 
         ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("student_info", info);
