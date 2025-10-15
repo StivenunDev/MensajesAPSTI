@@ -24,7 +24,7 @@ public class LauncherActivity extends AppCompatActivity {
             startActivity(new Intent(LauncherActivity.this, MainActivity.class));
         } else {
             // Si no hay sesión, va a la pantalla de login
-            startActivity(new Intent(LauncherActivity.this, login.class));
+            startActivity(new Intent(LauncherActivity.this, LoginActivity.class));
         }
 
         // Finaliza esta actividad para que el usuario no pueda volver a ella

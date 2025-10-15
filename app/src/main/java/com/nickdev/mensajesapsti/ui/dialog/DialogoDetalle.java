@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ public class DialogoDetalle extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +81,23 @@ public class DialogoDetalle extends DialogFragment {
         if (clipboard != null) {
             clipboard.setPrimaryClip(clip);
             Toast.makeText(getContext(), "Información copiada al portapapeles", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // MÉTODO AÑADIDO PARA AJUSTAR EL TAMAÑO
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams params = window.getAttributes();
+            // Establecer el ancho para que ocupe casi toda la pantalla
+            params.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+            // Quitar el fondo por defecto para que los bordes redondeados se vean bien
+            window.setBackgroundDrawableResource(android.R.color.transparent);
         }
     }
 }

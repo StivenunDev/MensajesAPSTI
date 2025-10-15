@@ -8,6 +8,12 @@
     app:cardBackgroundColor="@android:color/transparent">
 
 
+    <View
+        android:id="@+id/lineaSuperior"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCCCCC"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,43 +21,29 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
-        <View
-            android:id="@+id/lineaSuperior"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#CCCCCC"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TextView para el nombre (item principal) -->
         <TextView
             android:id="@+id/student_name_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/lineaSuperior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/student_checkbox"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/student_checkbox"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Sonia Urquiza Flores" />
 
-        <!-- CheckBox -->
         <CheckBox
             android:id="@+id/student_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/student_name_text_view"
-            app:layout_constraintBottom_toBottomOf="@id/student_name_text_view" />
-
-        <!-- Línea inferior -->
-        <View
-            android:id="@+id/lineaInferior"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#CCCCCC"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/student_name_text_view" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

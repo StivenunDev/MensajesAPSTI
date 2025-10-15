@@ -16,7 +16,7 @@ import com.nickdev.mensajesapsti.ui.viewmodel.LoginViewModel;
 import com.nickdev.mensajesapsti.util.SessionManager;
 
 
-public class login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
@@ -25,6 +25,8 @@ public class login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);// Inicializar ViewModel
@@ -48,7 +50,7 @@ public class login extends AppCompatActivity {
             if (success != null && success) {
 
                 sessionManager.createLoginSession();// Si el login fue exitoso, navegar a MainActivity
-                Intent intent = new Intent(login.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish(); // Finaliza LoginActivity para que no se pueda volver atrás
             }

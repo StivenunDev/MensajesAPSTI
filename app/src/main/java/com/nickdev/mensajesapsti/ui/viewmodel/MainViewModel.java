@@ -80,6 +80,17 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    public ArrayList<Estudiante> getSelectedStudents() {
+        ArrayList<Estudiante> selected = new ArrayList<>();
+        for (Estudiante student : allStudents) {
+            if (student.estaSeleccionado()) {
+                selected.add(student);
+            }
+        }
+        return selected;
+    }
+
+
     // El método central que aplica toda la lógica de filtrado
     public void applyFilters() {
         List<Estudiante> filteredList = new ArrayList<>();
