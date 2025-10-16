@@ -44,6 +44,8 @@ public class MainViewModel extends ViewModel {
             allStudents.add(new Estudiante("Ana Torres Mendoza", "ana@test.com", "987654325", "APSTI", "V"));
             allStudents.add(new Estudiante("Luis Chavez Costa", "luis@test.com", "987654326", "Electricidad", "III"));
             allStudents.add(new Estudiante("Sofia Ramirez Luna", "sofia@test.com", "987654327", "APSTI", "VI"));
+            allStudents.add(new Estudiante("Flor Marisol Caballero", "FlorM@test.com", "983039711", "APSTI", "VI"));
+            allStudents.add(new Estudiante("Nick Aguilar Caballero", "nsac.bot.2@gmail.com", "952271149", "APSTI", "VI"));
         }
         // Aplica los filtros (al inicio, ninguno) para mostrar la lista completa
         applyFilters();

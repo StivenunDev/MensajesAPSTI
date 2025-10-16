@@ -26,10 +26,11 @@ public class Estudiante implements Parcelable {
         this.telefono = telefono;
         this.carrera = carrera;
         this.periodo = periodo;
-        this.seleccionado = false; // Se asegura de que 'seleccionado' siempre tenga un valor inicial.
+        this.seleccionado = false; // Valor inicial por defecto
     }
 
     // --- Constructor para Parcelable (uso interno de Android) ---
+
     protected Estudiante(Parcel in) {
         id_estudiante = in.readString();
         nombreCompleto = in.readString();
@@ -37,11 +38,12 @@ public class Estudiante implements Parcelable {
         telefono = in.readString();
         carrera = in.readString();
         periodo = in.readString();
-        // CORRECCIÓN: Leemos el estado de 'seleccionado' desde el Parcel.
+        // CORRECCIÓN: Leemos el estado de 'seleccionado'
         seleccionado = in.readByte() != 0;
     }
 
     // --- Métodos de la interfaz Parcelable ---
+
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(id_estudiante);
@@ -50,7 +52,7 @@ public class Estudiante implements Parcelable {
         dest.writeString(telefono);
         dest.writeString(carrera);
         dest.writeString(periodo);
-        // CORRECCIÓN: Escribimos el estado de 'seleccionado' en el Parcel.
+        // CORRECCIÓN: Escribimos el estado de 'seleccionado'
         dest.writeByte((byte) (seleccionado ? 1 : 0));
     }
 
@@ -73,7 +75,7 @@ public class Estudiante implements Parcelable {
 
     // --- Getters y Setters (sin cambios, ya estaban bien) ---
     public String getNombreCompleto() { return nombreCompleto; }
-    public String getEmail() { return correoElectronico; }
+    public String getCorreoElectronico() { return correoElectronico; }
     public String getTelefono() { return telefono; }
     public String getCarrera() { return carrera; }
     public String getPeriodo() { return periodo; }

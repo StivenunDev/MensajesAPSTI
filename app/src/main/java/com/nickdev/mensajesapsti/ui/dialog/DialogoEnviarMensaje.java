@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.nickdev.mensajesapsti.data.model.Estudiante;
-import com.nickdev.mensajesapsti.databinding.FragmentDialogoDetalleBinding;
 import com.nickdev.mensajesapsti.databinding.FragmentDialogoEnviarMensajeBinding;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class DialogoEnviarMensaje extends DialogFragment {
     private ArrayList<Uri> attachmentUris = new ArrayList<>();
 
     // Launcher para el selector de archivos
-    private ActivityResultLauncher<String[]> filePickerLauncher;
+    private ActivityResultLauncher<String> filePickerLauncher;
 
 
     public interface SendMessageListener {
@@ -64,12 +63,12 @@ public class DialogoEnviarMensaje extends DialogFragment {
             selectedStudents = getArguments().getParcelableArrayList(ARG_SELECTED_STUDENTS);
         }
 
-        // Inicializamos el launcher que se encargará de abrir el selector de archivos
+        // Inicializamos el launcher. El contrato es correcto, pero la declaración de la variable estaba mal.
         filePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), uris -> {
-            // Este código se ejecuta cuando el usuario selecciona los archivos
             if (uris != null && !uris.isEmpty()) {
+                attachmentUris.clear(); // Limpiamos para una nueva selección
                 attachmentUris.addAll(uris);
-                updateAttachmentsInfo(); // Actualiza el texto en la UI
+                updateAttachmentsInfo();
                 Toast.makeText(getContext(), uris.size() + " archivo(s) adjuntado(s).", Toast.LENGTH_SHORT).show();
             }
         });

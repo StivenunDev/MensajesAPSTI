@@ -64,7 +64,7 @@ public class DialogoDetalle extends DialogFragment {
 
     private void populateUI() {
         binding.studentNameText.setText(student.getNombreCompleto());
-        binding.studentEmailText.setText(student.getEmail());
+        binding.studentEmailText.setText(student.getCorreoElectronico());
         binding.studentPhoneText.setText(student.getTelefono());
         String careerAndPeriod = student.getCarrera() + " - " + student.getPeriodo();
         binding.studentCareerText.setText(careerAndPeriod);
@@ -72,7 +72,7 @@ public class DialogoDetalle extends DialogFragment {
 
     private void copyStudentInfoToClipboard() {
         String info = "Nombre: " + student.getNombreCompleto() + "\n" +
-                "Email: " + student.getEmail() + "\n" +
+                "Email: " + student.getCorreoElectronico() + "\n" +
                 "Teléfono: " + student.getTelefono() + "\n" +
                 "Carrera: " + student.getCarrera() + " - " + student.getPeriodo();
 

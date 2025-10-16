@@ -78,11 +78,11 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
             // Tu lógica para el checkbox está muy bien.
             // Para evitar que el listener se dispare al reciclar vistas, lo ponemos a null primero.
             binding.studentCheckbox.setOnCheckedChangeListener(null);
-            binding.studentCheckbox.setChecked(student.EstudienteisSelect());
+            binding.studentCheckbox.setChecked(student.estaSeleccionado());
 
             // Actualiza el estado del estudiante cuando se hace clic en el checkbox
             binding.studentCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                student.SelectEstudiante(isChecked);
+                student.establecerSeleccionado(isChecked);
             });
 
             // CORRECCIÓN: El listener del clic se configura aquí, donde tiene acceso a todo.

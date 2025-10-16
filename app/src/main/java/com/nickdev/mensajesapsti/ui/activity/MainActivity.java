@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements
     private void sendEmailIntent(String message, ArrayList<Estudiante> students, ArrayList<Uri> attachments) {
         String[] emails = new String[students.size()];
         for (int i = 0; i < students.size(); i++) {
-            emails[i] = students.get(i).getEmail();
+            emails[i] = students.get(i).getCorreoElectronico();
         }
 
         Intent intent;
