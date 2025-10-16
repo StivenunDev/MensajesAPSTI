@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements
         drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         binding.drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-
         binding.menuIcon.setOnClickListener(v -> binding.drawerLayout.openDrawer(GravityCompat.START));
         binding.navView.setNavigationItemSelectedListener(this);
     }
@@ -197,40 +196,54 @@ public class MainActivity extends AppCompatActivity implements
 
 
     @Override
-    public void onSendMessage(String message, boolean sendSms, boolean sendEmail, ArrayList<Estudiante> students) {
+    public void onSendMessage(String message, boolean sendSms, boolean sendEmail, ArrayList<Estudiante> students, ArrayList<Uri> attachments) {
         if (sendSms) {
             sendSmsIntent(message, students);
         }
         if (sendEmail) {
-            sendEmailIntent(message, students);
+            sendEmailIntent(message, students, attachments);
         }
         Toast.makeText(this, "Preparando envío de mensajes...", Toast.LENGTH_SHORT).show();
     }
+
     private void sendSmsIntent(String message, ArrayList<Estudiante> students) {
         StringBuilder numbers = new StringBuilder();
         for (Estudiante student : students) {
             numbers.append(student.getTelefono()).append(";");
         }
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("smsto:" + numbers.toString()));
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + numbers));
         intent.putExtra("sms_body", message);
         startActivity(intent);
     }
 
-    private void sendEmailIntent(String message, ArrayList<Estudiante> students) {
+    private void sendEmailIntent(String message, ArrayList<Estudiante> students, ArrayList<Uri> attachments) {
         String[] emails = new String[students.size()];
         for (int i = 0; i < students.size(); i++) {
             emails[i] = students.get(i).getEmail();
         }
 
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"));
+        Intent intent;
+        if (attachments == null || attachments.isEmpty()) {
+            // Si NO hay adjuntos, usamos un intent simple.
+            intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
+        } else {
+            // Si SÍ hay adjuntos, usamos un intent para múltiples archivos.
+            intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            intent.setType("*/*"); // Permite cualquier tipo de archivo
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachments);
+            // Otorgamos permiso temporal a la app de correo para leer los archivos.
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+
         intent.putExtra(Intent.EXTRA_EMAIL, emails);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Mensaje Institucional"); // Asunto del correo
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Mensaje Institucional");
         intent.putExtra(Intent.EXTRA_TEXT, message);
 
-        // Usamos un chooser para que el usuario pueda elegir qué app de correo usar
         startActivity(Intent.createChooser(intent, "Enviar correo..."));
     }
+
+
+
+
 }
 

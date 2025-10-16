@@ -73,7 +73,7 @@ public class MainViewModel extends ViewModel {
         List<Estudiante> currentList = students.getValue();
         if (currentList != null) {
             for (Estudiante student : currentList) {
-                student.SelectEstudiante(select);
+                student.establecerSeleccionado(select);
             }
             // Notificamos a la UI que los datos han cambiado para que los checkboxes se actualicen
             students.setValue(new ArrayList<>(currentList));
