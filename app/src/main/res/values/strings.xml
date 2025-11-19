@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MensajesAPSTI</string>
+    <string name="app_name">Notif APSTI</string>
 
     <!-- Textos para la pantalla de Login -->
     <string name="welcome">Bienvenido</string>

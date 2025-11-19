@@ -4,12 +4,18 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Colores específicos del Login -->
-    <color name="login_background">#3B5998</color> <!-- Azul principal del fondo -->
+    <color name="login_background">#0D0847</color> <!-- Azul principal del fondo -->
     <color name="login_form_background">#E8EAF6</color> <!-- Color claro para inputs y botón -->
     <color name="login_form_text">#8A8A8A</color> <!-- Color del texto de placeholder -->
     <color name="login_button_text">#3B5998</color> <!-- Color del texto del botón -->
     <color name="login_welcome_text">#FFFFFF</color> <!-- Color del texto "Bienvenido" -->
     <color name="app_primary_color">#305F82</color>
 
-
+    <!-- NUEVOS COLORES PARA FILTROS -->
+    <!-- Color de fondo para el item seleccionado (un azul claro) -->
+    <color name="filter_active_background">#E8EAF6</color>
+    <!-- Color de texto para el item seleccionado (el azul principal) -->
+    <color name="filter_active_text">#305F82</color>
+    <!-- Color de texto para items no seleccionados (un gris oscuro) -->
+    <color name="filter_inactive_text">#424242</color>
 </resources>

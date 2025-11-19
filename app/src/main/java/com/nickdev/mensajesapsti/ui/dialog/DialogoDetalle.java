@@ -18,6 +18,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.nickdev.mensajesapsti.data.model.Estudiante;
 import com.nickdev.mensajesapsti.databinding.FragmentDialogoDetalleBinding;
+import com.nickdev.mensajesapsti.R;
+
 
 public class DialogoDetalle extends DialogFragment {
 
@@ -65,7 +67,7 @@ public class DialogoDetalle extends DialogFragment {
     private void populateUI() {
         binding.studentNameText.setText(student.getNombreCompleto());
         binding.studentEmailText.setText(student.getCorreoElectronico());
-        binding.studentPhoneText.setText(student.getTelefono());
+        binding.studentPhoneText.setText(student.getTelefono());// por implementar
         String careerAndPeriod = student.getCarrera() + " - " + student.getPeriodo();
         binding.studentCareerText.setText(careerAndPeriod);
     }

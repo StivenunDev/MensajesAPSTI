@@ -7,15 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.nickdev.mensajesapsti.data.model.Estudiante;
 import com.nickdev.mensajesapsti.databinding.FragmentDialogoEnviarMensajeBinding;
+import com.nickdev.mensajesapsti.ui.adapter.AdjuntoAdapter;
 
 import java.util.ArrayList;
 
@@ -26,16 +27,14 @@ public class DialogoEnviarMensaje extends DialogFragment {
     private SendMessageListener listener;
     private ArrayList<Estudiante> selectedStudents;
 
+    // Lista local de URIs
+    private final ArrayList<Uri> attachmentUris = new ArrayList<>();
 
-    // Lista para guardar los URIs de los archivos adjuntos
-    private ArrayList<Uri> attachmentUris = new ArrayList<>();
-
-    // Launcher para el selector de archivos
+    private  AdjuntoAdapter adjuntoAdapter;
     private ActivityResultLauncher<String> filePickerLauncher;
 
-
     public interface SendMessageListener {
-        void onSendMessage(String message, boolean sendSms, boolean sendEmail, ArrayList<Estudiante> students, ArrayList<Uri> attachments);
+        void onSendMessage(String titulo, String message, ArrayList<Estudiante> students, ArrayList<Uri> attachments);
     }
 
     public static DialogoEnviarMensaje newInstance(ArrayList<Estudiante> selectedStudents) {
@@ -63,13 +62,10 @@ public class DialogoEnviarMensaje extends DialogFragment {
             selectedStudents = getArguments().getParcelableArrayList(ARG_SELECTED_STUDENTS);
         }
 
-        // Inicializamos el launcher. El contrato es correcto, pero la declaración de la variable estaba mal.
         filePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), uris -> {
             if (uris != null && !uris.isEmpty()) {
-                attachmentUris.clear(); // Limpiamos para una nueva selección
                 attachmentUris.addAll(uris);
-                updateAttachmentsInfo();
-                Toast.makeText(getContext(), uris.size() + " archivo(s) adjuntado(s).", Toast.LENGTH_SHORT).show();
+                adjuntoAdapter.setAdjunto(attachmentUris);
             }
         });
     }
@@ -79,53 +75,49 @@ public class DialogoEnviarMensaje extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDialogoEnviarMensajeBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        updateAttachmentsInfo(); // Inicializa el texto de adjuntos
+        // Configurar RecyclerView de Adjuntos
+        adjuntoAdapter = new AdjuntoAdapter(position -> {
+            attachmentUris.remove(position);
+            adjuntoAdapter.setAdjunto(attachmentUris);
+        });
+        binding.attachmentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.attachmentsRecyclerView.setAdapter(adjuntoAdapter);
 
         binding.closeButton.setOnClickListener(v -> dismiss());
 
-        // El botón "Adjuntar Archivos" ahora lanza el selector de archivos
         binding.attachFilesButton.setOnClickListener(v -> {
-            // Permite seleccionar cualquier tipo de archivo
-            filePickerLauncher.launch("*/*");
+            filePickerLauncher.launch("*/*"); // Permite cualquier archivo
         });
 
         binding.sendButton.setOnClickListener(v -> {
+            String titulo = binding.titleEditText.getText().toString().trim();
             String message = binding.messageEditText.getText().toString().trim();
-            boolean sendSms = binding.smsSwitch.isChecked();
-            boolean sendEmail = binding.emailSwitch.isChecked();
 
+            if (titulo.isEmpty()) {
+                binding.titleInputLayout.setError("Asunto requerido");
+                return;
+            }
             if (message.isEmpty()) {
-                Toast.makeText(getContext(), "El mensaje no puede estar vacío", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!sendSms && !sendEmail) {
-                Toast.makeText(getContext(), "Selecciona al menos un medio de envío", Toast.LENGTH_SHORT).show();
+                binding.messageInputLayout.setError("Mensaje requerido");
                 return;
             }
 
-            listener.onSendMessage(message, sendSms, sendEmail, selectedStudents, attachmentUris);
+            listener.onSendMessage(titulo, message, selectedStudents, attachmentUris);
             dismiss();
         });
-
-        // Lógica para adjuntar archivos (simplificada por ahora)
-        binding.attachFilesButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Función para adjuntar archivos no implementada aún.", Toast.LENGTH_SHORT).show();
-        });
     }
-    // Método para actualizar la UI con la cantidad de archivos adjuntos
-    private void updateAttachmentsInfo() {
-        int count = attachmentUris.size();
-        if (count == 0) {
-            binding.attachmentsInfoText.setText("Ningún archivo adjunto.");
-        } else {
-            binding.attachmentsInfoText.setText(count + " archivo(s) adjunto(s). Los archivos solo se enviarán por correo.");
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
     }
 }

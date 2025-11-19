@@ -20,7 +20,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
-    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);// Inicializar ViewModel
-        sessionManager = new SessionManager(getApplicationContext());
+
 
         // Configurar el listener del botón para llamar al ViewModel
         binding.btnLogin.setOnClickListener(v -> {
@@ -49,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getLoginResult().observe(this, success -> {
             if (success != null && success) {
 
-                sessionManager.createLoginSession();// Si el login fue exitoso, navegar a MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish(); // Finaliza LoginActivity para que no se pueda volver atrás

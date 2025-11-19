@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MensajesAPSTI"
+rootProject.name = "NotificacionesAPSTI"
 include(":app")
  
