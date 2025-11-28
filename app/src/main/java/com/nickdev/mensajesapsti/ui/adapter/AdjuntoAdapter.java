@@ -11,7 +11,7 @@ import java.util.List;
 
 public class AdjuntoAdapter extends RecyclerView.Adapter<AdjuntoAdapter.AdjuntoViewHolder> {
 
-    private final List<Uri> attachments = new ArrayList<>();
+    private final List<Uri> adjuntos = new ArrayList<>();
     private final OnDeleteListener deleteListener;
 
     public interface OnDeleteListener {
@@ -23,8 +23,8 @@ public class AdjuntoAdapter extends RecyclerView.Adapter<AdjuntoAdapter.AdjuntoV
     }
 
     public void setAdjunto(List<Uri> newAttachments) {
-        attachments.clear();
-        attachments.addAll(newAttachments);
+        adjuntos.clear();
+        adjuntos.addAll(newAttachments);
         notifyDataSetChanged();
     }
 
@@ -38,13 +38,13 @@ public class AdjuntoAdapter extends RecyclerView.Adapter<AdjuntoAdapter.AdjuntoV
 
     @Override
     public void onBindViewHolder(@NonNull AdjuntoViewHolder holder, int position) {
-        Uri uri = attachments.get(position);
+        Uri uri = adjuntos.get(position);
         holder.bind(uri, position);
     }
 
     @Override
     public int getItemCount() {
-        return attachments.size();
+        return adjuntos.size();
     }
 
     class AdjuntoViewHolder extends RecyclerView.ViewHolder {

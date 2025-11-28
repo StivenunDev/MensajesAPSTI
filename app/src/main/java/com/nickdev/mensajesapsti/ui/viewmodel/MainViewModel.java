@@ -55,7 +55,7 @@ public class MainViewModel extends ViewModel {
         if (!allStudents.isEmpty()) { applyFilters(); return; }
 
         isLoading.setValue(true);
-        //ApiService apiService = RetrofitClient.getPrivateApiService(context);
+        // Usar el cliente adecuado según tu configuración de seguridad
         ApiService apiService = RetrofitClient.getPublicApiService();
 
         apiService.getEstudiantes().enqueue(new Callback<List<Estudiante>>() {
@@ -80,13 +80,11 @@ public class MainViewModel extends ViewModel {
 
 
     // =================================================================================
-    //  2. LÓGICA DE ENVÍO DE MENSAJE (Con Adjuntos)
+    //  2. LÓGICA DE ENVÍO DE MENSAJE (Con Adjuntos y Notificación)
     // =================================================================================
 
     /**
      * Método principal llamado desde la Activity.
-     * 1. Si hay archivos -> Los sube primero (recursivamente).
-     * 2. Si no hay archivos -> Envía el mensaje directamente.
      */
     public void enviarMensajeCompleto(Context context, MensajeRequest requestDraft, List<Uri> fileUris) {
         isLoading.setValue(true);
@@ -98,9 +96,7 @@ public class MainViewModel extends ViewModel {
             subirArchivoRecursivo(context, requestDraft, fileUris, 0, uploadedUrls);
         }
     }
-    /**
-     * Sube archivos uno por uno para evitar saturar la red y manejar errores fácilmente.
-     */
+
     private void subirArchivoRecursivo(Context context, MensajeRequest requestDraft, List<Uri> uris, int index, List<String> urlsAcumuladas) {
         if (index >= uris.size()) {
             finalizarEnvioMensaje(context, requestDraft, urlsAcumuladas);
@@ -108,16 +104,14 @@ public class MainViewModel extends ViewModel {
         }
 
         Uri fileUri = uris.get(index);
-        // Obtenemos nombre para mostrar errores si falla
         String filename = getFileName(context, fileUri);
 
-        // Preparamos el archivo
         InputStreamRequestBody requestFile = new InputStreamRequestBody(context.getContentResolver(), fileUri);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", filename, requestFile);
 
+        // Usamos el servicio privado para subir archivos (requiere token si el backend lo protege)
         ApiService api = RetrofitClient.getPrivateApiService(context);
 
-        // AHORA LOS TIPOS COINCIDEN: Call<Map...>
         api.uploadFile(body).enqueue(new Callback<Map<String, String>>() {
             @Override
             public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
@@ -126,7 +120,6 @@ public class MainViewModel extends ViewModel {
                     if (url != null) {
                         urlsAcumuladas.add(url);
                     }
-                    // Siguiente archivo
                     subirArchivoRecursivo(context, requestDraft, uris, index + 1, urlsAcumuladas);
                 } else {
                     isLoading.setValue(false);
@@ -141,17 +134,32 @@ public class MainViewModel extends ViewModel {
             }
         });
     }
+
     /**
-     * Paso final: Envía el JSON del mensaje con las URLs de los adjuntos ya integradas.
+     * Paso final: Reconstruye el objeto MensajeRequest con las URLs y lo envía.
      */
     private void finalizarEnvioMensaje(Context context, MensajeRequest requestDraft, List<String> attachmentUrls) {
-        // Construimos el objeto final con las URLs reales
+
+        // ⚠️ CORRECCIÓN IMPORTANTE AQUÍ ⚠️
+        // Al crear el 'finalRequest', debemos pasar el booleano (o la lista de canales)
+        // que ya configuramos en el 'requestDraft' original.
+
+        // Asumimos que modificaste MensajeRequest para tener un getter o el campo público
+        // Opción A: Si agregaste el getter getCanales()
+        // Opción B: Si usas el constructor con booleano, verifica si la lista tiene "push"
+
+        boolean enviarPush = false;
+        if (requestDraft.getCanales() != null && requestDraft.getCanales().contains("push")) {
+            enviarPush = true;
+        }
+
         MensajeRequest finalRequest = new MensajeRequest(
                 requestDraft.getTitulo(),
                 requestDraft.getCuerpo(),
                 requestDraft.getAdminId(),
                 requestDraft.getEstudiantesIds(),
-                attachmentUrls
+                attachmentUrls, // Aquí inyectamos las URLs de los archivos subidos
+                enviarPush      // <--- ¡AQUÍ PRESERVAMOS LA DECISIÓN DE NOTIFICAR!
         );
 
         ApiService api = RetrofitClient.getPrivateApiService(context);
@@ -161,6 +169,7 @@ public class MainViewModel extends ViewModel {
                 isLoading.setValue(false);
                 if (response.isSuccessful()) {
                     Toast.makeText(context, "¡Mensaje enviado correctamente!", Toast.LENGTH_LONG).show();
+                    // Opcional: Limpiar selección
                 } else {
                     Toast.makeText(context, "Error al crear mensaje: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
@@ -178,7 +187,6 @@ public class MainViewModel extends ViewModel {
     //  3. LÓGICA DE FILTROS Y UTILIDADES
     // =================================================================================
 
-    // Utilidad para obtener nombre de archivo desde Uri
     private String getFileName(Context context, Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
@@ -197,7 +205,6 @@ public class MainViewModel extends ViewModel {
         return result;
     }
 
-    // --- Filtros (Igual que antes) ---
     public void toggleCareerFilter(String career, boolean isChecked) {
         if (isChecked) selectedCareers.add(career); else selectedCareers.remove(career);
     }
@@ -212,19 +219,16 @@ public class MainViewModel extends ViewModel {
         this.currentSearchQuery = query.toLowerCase().trim();
     }
 
-    // Seleccionar todos
     public void selectAllVisible(boolean select) {
         List<Estudiante> currentList = students.getValue();
         if (currentList != null) {
             for (Estudiante student : currentList) {
                 student.establecerSeleccionado(select);
             }
-            // Forzamos actualización del LiveData
             students.setValue(new ArrayList<>(currentList));
         }
     }
 
-    // Obtener seleccionados para el envío
     public ArrayList<Estudiante> getSelectedStudents() {
         ArrayList<Estudiante> selected = new ArrayList<>();
         for (Estudiante student : allStudents) {
@@ -235,7 +239,6 @@ public class MainViewModel extends ViewModel {
         return selected;
     }
 
-    // Aplicar Filtros (Crucial para refrescar la lista)
     public void applyFilters() {
         List<Estudiante> filteredList = new ArrayList<>();
         String searchQuery = currentSearchQuery.toLowerCase();

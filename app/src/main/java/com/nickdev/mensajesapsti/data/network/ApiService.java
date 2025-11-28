@@ -1,6 +1,7 @@
 package com.nickdev.mensajesapsti.data.network;
 
 import com.nickdev.mensajesapsti.data.model.Estudiante;
+import com.nickdev.mensajesapsti.data.model.Mensaje;
 import com.nickdev.mensajesapsti.data.network.models.LoginRequest;
 import com.nickdev.mensajesapsti.data.network.models.LoginResponse;
 import com.nickdev.mensajesapsti.data.model.api.MensajeRequest;
@@ -20,14 +21,17 @@ public interface ApiService {
     @POST("/api/v1/auth/login/admin")
     Call<LoginResponse> login(@Body LoginRequest request);
 
-    @GET("api/v1/estudiantes/estudiante")
+    @GET("api/v1/estudiante")
     Call<List<Estudiante>> getEstudiantes();
 
-    // --- CORRECCIÓN: Devolver Map en lugar de ResponseBody ---
+
+    @GET("/api/v1/mensaje")
+    Call<List<Mensaje>> obtenerMensajesEnviados();
+
     @Multipart
     @POST("/api/v1/files/upload")
     Call<Map<String, String>> uploadFile(@Part MultipartBody.Part file);
 
-    @POST("/api/v1/notificaciones/mensajes")
+    @POST("/api/v1/mensaje")
     Call<Void> crearMensaje(@Body MensajeRequest request);
 }

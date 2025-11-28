@@ -34,7 +34,7 @@ public class DialogoEnviarMensaje extends DialogFragment {
     private ActivityResultLauncher<String> filePickerLauncher;
 
     public interface SendMessageListener {
-        void onSendMessage(String titulo, String message, ArrayList<Estudiante> students, ArrayList<Uri> attachments);
+        void onSendMessage(String titulo, String message, ArrayList<Estudiante> students, ArrayList<Uri> attachments,boolean enviarPush);
     }
 
     public static DialogoEnviarMensaje newInstance(ArrayList<Estudiante> selectedStudents) {
@@ -99,6 +99,9 @@ public class DialogoEnviarMensaje extends DialogFragment {
             String titulo = binding.titleEditText.getText().toString().trim();
             String message = binding.messageEditText.getText().toString().trim();
 
+            // 2. OBTENER EL VALOR DEL CHECKBOX
+            boolean enviarPush = binding.chbEnviarPush.isChecked();
+
             if (titulo.isEmpty()) {
                 binding.titleInputLayout.setError("Asunto requerido");
                 return;
@@ -108,7 +111,8 @@ public class DialogoEnviarMensaje extends DialogFragment {
                 return;
             }
 
-            listener.onSendMessage(titulo, message, selectedStudents, attachmentUris);
+            // 3. PASAR EL BOOLEANO AL LISTENER
+            listener.onSendMessage(titulo, message, selectedStudents, attachmentUris, enviarPush);
             dismiss();
         });
     }

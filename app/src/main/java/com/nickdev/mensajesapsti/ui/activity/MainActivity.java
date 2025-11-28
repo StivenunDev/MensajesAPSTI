@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // --- IMPLEMENTACIÓN DEL LISTENER DE ENVÍO ---
     @Override
-    public void onSendMessage(String titulo, String message, ArrayList<Estudiante> students, ArrayList<Uri> attachments) {
+    public void onSendMessage(String titulo, String message, ArrayList<Estudiante> students, ArrayList<Uri> attachments, boolean enviarPush) {
         // 1. Obtener ID del Admin
         int adminId = sessionManager.getAdminId();
         if (adminId == -1) {
@@ -252,9 +252,12 @@ public class MainActivity extends AppCompatActivity implements
                 message,
                 adminId,
                 studentIds,
-                new ArrayList<>()
+                new ArrayList<>(),
+                enviarPush
         );
 
+        //mensaje de prueva
+        android.util.Log.d("DEBUG_ENVIO", "Admin ID a enviar: " + request.getAdminId());
         // 4. Llamar a la lógica completa en el ViewModel
         mainViewModel.enviarMensajeCompleto(this, request, attachments);
     }

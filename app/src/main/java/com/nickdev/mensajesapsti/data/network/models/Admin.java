@@ -1,7 +1,7 @@
 package com.nickdev.mensajesapsti.data.network.models;
 import com.google.gson.annotations.SerializedName;
 public class Admin {
-    @SerializedName("id_admin")
+    @SerializedName("id")
     private int id;
 
     @SerializedName("correo")
