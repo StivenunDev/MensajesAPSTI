@@ -14,14 +14,14 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
 
     private List<Mensaje> mensajes;
     private Context context;
-    private final OnItemClickListener listener; // 1. Variable para el listener
+    private final OnItemClickListener listener;
 
-    // 2. Interfaz para comunicar el clic a la Actividad
+    // Interfaz para comunicar el clic a la Actividad
     public interface OnItemClickListener {
         void onItemClick(Mensaje mensaje);
     }
 
-    // 3. Constructor actualizado: Ahora pide la lista Y el listener
+    // Constructor actualizado
     public HistorialAdapter(List<Mensaje> mensajes, OnItemClickListener listener) {
         this.mensajes = mensajes;
         this.listener = listener;
@@ -44,18 +44,29 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Mensaje mensaje = mensajes.get(position);
 
+        // 1. Asignar Título y Fecha
         holder.binding.tvTituloIM.setText(mensaje.getTitulo());
+        // Asegúrate de que tu modelo Mensaje tenga este método getter, si se llama diferente (ej: getFechaCreacion), ajústalo aquí.
+        // Si tu backend envía "creadoEn", es posible que necesites formatearlo o usar ese campo.
         holder.binding.tvFechaIM.setText(mensaje.getFechaHora());
 
-        int count = mensaje.getConteoAdjunto();
+        // 2. Lógica de Adjuntos Actualizada
+        // Verificamos el tamaño de la lista de objetos 'Adjunto'
+        int count = 0;
+        if (mensaje.getAdjuntos() != null) {
+            count = mensaje.getAdjuntos().size();
+        }
+
         if (count > 0) {
             holder.binding.llyAttachments.setVisibility(View.VISIBLE);
             holder.binding.tvAttachmentCount.setText(count + (count == 1 ? " Archivo" : " Archivos"));
+            holder.binding.llyAttachmentIcons.setVisibility(View.VISIBLE);
         } else {
             holder.binding.llyAttachments.setVisibility(View.GONE);
+            holder.binding.llyAttachmentIcons.setVisibility(View.GONE);
         }
 
-        // Ocultar checkbox ya que es solo historial
+        // 3. Ocultar checkbox (solo lectura)
         holder.binding.cbIM.setVisibility(View.GONE);
 
         // 4. Configurar el clic

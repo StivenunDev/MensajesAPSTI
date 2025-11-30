@@ -18,20 +18,20 @@ import java.util.Map;
 
 public interface ApiService {
 
-    @POST("/api/v1/auth/login/admin")
+    @POST("/api/v1/auth/login/admins")
     Call<LoginResponse> login(@Body LoginRequest request);
 
-    @GET("api/v1/estudiante")
+    @GET("api/v1/estudiantes")
     Call<List<Estudiante>> getEstudiantes();
 
 
-    @GET("/api/v1/mensaje")
+    @GET("/api/v1/mensajes")
     Call<List<Mensaje>> obtenerMensajesEnviados();
 
     @Multipart
     @POST("/api/v1/files/upload")
     Call<Map<String, String>> uploadFile(@Part MultipartBody.Part file);
 
-    @POST("/api/v1/mensaje")
+    @POST("/api/v1/mensajes")
     Call<Void> crearMensaje(@Body MensajeRequest request);
 }

@@ -18,17 +18,50 @@ public class Mensaje {
     private String fechaHora;
 
     @SerializedName("adjuntos")
-    private List<String> adjuntos; // Lista de URLs
+    private List<Adjunto> adjuntos; // Lista de URLs
 
     // Constructor vacío
     public Mensaje() {}
 
-    // Getters
-    public int getId() { return id; }
-    public String getTitulo() { return titulo; }
-    public String getCuerpo() { return cuerpo; }
-    public String getFechaHora() { return fechaHora; }
-    public List<String> getAdjuntos() { return adjuntos; }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getCuerpo() {
+        return cuerpo;
+    }
+
+    public void setCuerpo(String cuerpo) {
+        this.cuerpo = cuerpo;
+    }
+
+    public String getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(String fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public List<Adjunto> getAdjuntos() {
+        return adjuntos;
+    }
+
+    public void setAdjuntos(List<Adjunto> adjuntos) {
+        this.adjuntos = adjuntos;
+    }
 
     // Helper para contar adjuntos
     public int getConteoAdjunto() {

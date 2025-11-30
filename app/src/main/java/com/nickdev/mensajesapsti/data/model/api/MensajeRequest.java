@@ -18,7 +18,7 @@ public class MensajeRequest {
 
     // Tu backend espera "estudiantes_ids" (array de números o strings)
     @SerializedName("estudiantesIds")
-    private List<String> estudiantesIds;
+    private List<Integer> estudiantesIds;
 
     // Tu backend espera "adjuntos" (lista de URLs strings)
     @SerializedName("adjuntos")
@@ -28,18 +28,35 @@ public class MensajeRequest {
     @SerializedName("canales")
     private List<String> canales;
 
-    public MensajeRequest(String titulo, String cuerpo, int adminId, List<String> estudiantesIds, List<String> adjuntos, boolean enviarPush) {
+    @SerializedName("enviarATodos")
+    private boolean enviarATodos;
+
+    public MensajeRequest(String titulo, String cuerpo, int adminId, List<String> estudiantesIdsStrings, List<String> adjuntos, boolean enviarPush) {
         this.titulo = titulo;
         this.cuerpo = cuerpo;
         this.adminId = adminId;
-        this.estudiantesIds = estudiantesIds;
         this.adjuntos = adjuntos;
+
+        this.estudiantesIds = new ArrayList<>();
+        if (estudiantesIdsStrings != null) {
+            for (String id : estudiantesIdsStrings) {
+                try {
+                    this.estudiantesIds.add(Integer.parseInt(id));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         // AQUÍ HACEMOS LA MAGIA: Traducir boolean -> Lista
         this.canales = new ArrayList<>();
         if (enviarPush) {
             this.canales.add("push");
+        }else{
+            this.canales.add("in-app");
         }
+
+        this.enviarATodos = (this.estudiantesIds == null || this.estudiantesIds.isEmpty());
     }
 
     public String getTitulo() {
@@ -74,11 +91,11 @@ public class MensajeRequest {
         this.adminId = adminId;
     }
 
-    public List<String> getEstudiantesIds() {
+    public List<Integer> getEstudiantesIds() {
         return estudiantesIds;
     }
 
-    public void setEstudiantesIds(List<String> estudiantesIds) {
+    public void setEstudiantesIds(List<Integer> estudiantesIds) {
         this.estudiantesIds = estudiantesIds;
     }
 

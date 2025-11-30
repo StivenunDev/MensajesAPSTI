@@ -11,7 +11,7 @@ public class RetrofitClient {
     // URL BASE DE TU API
     // ¡Importante! Usa 10.0.2.2 si corres en el emulador de Android Studio
     // Usa tu IP de red local (ej: 192.168.1.5) si usas un dispositivo físico
-    private static final String BASE_URL = "http://127.0.0.1:3000";
+    private static final String BASE_URL = "http://192.168.1.40:3000";
 
     private static Retrofit retrofit = null;
     private static ApiService publicApiService = null;

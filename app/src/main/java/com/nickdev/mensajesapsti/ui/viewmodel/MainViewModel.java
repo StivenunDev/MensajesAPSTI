@@ -140,28 +140,32 @@ public class MainViewModel extends ViewModel {
      */
     private void finalizarEnvioMensaje(Context context, MensajeRequest requestDraft, List<String> attachmentUrls) {
 
-        // ⚠️ CORRECCIÓN IMPORTANTE AQUÍ ⚠️
-        // Al crear el 'finalRequest', debemos pasar el booleano (o la lista de canales)
-        // que ya configuramos en el 'requestDraft' original.
-
-        // Asumimos que modificaste MensajeRequest para tener un getter o el campo público
-        // Opción A: Si agregaste el getter getCanales()
-        // Opción B: Si usas el constructor con booleano, verifica si la lista tiene "push"
-
+        // 1. Recuperar la decisión de "push" original
         boolean enviarPush = false;
         if (requestDraft.getCanales() != null && requestDraft.getCanales().contains("push")) {
             enviarPush = true;
         }
 
+        // 2. CORRECCIÓN DEL ERROR: Convertir List<Integer> -> List<String>
+        // El constructor espera Strings, pero el objeto ya tiene Integers.
+        List<String> idsComoString = new ArrayList<>();
+        if (requestDraft.getEstudiantesIds() != null) {
+            for (Integer id : requestDraft.getEstudiantesIds()) {
+                idsComoString.add(String.valueOf(id));
+            }
+        }
+
+        // 3. Crear el request final con la lista convertida
         MensajeRequest finalRequest = new MensajeRequest(
                 requestDraft.getTitulo(),
                 requestDraft.getCuerpo(),
                 requestDraft.getAdminId(),
-                requestDraft.getEstudiantesIds(),
-                attachmentUrls, // Aquí inyectamos las URLs de los archivos subidos
-                enviarPush      // <--- ¡AQUÍ PRESERVAMOS LA DECISIÓN DE NOTIFICAR!
+                idsComoString,  // <--- ¡AQUÍ PASAMOS LA LISTA DE STRINGS!
+                attachmentUrls,
+                enviarPush
         );
 
+        // 4. Llamada a la API
         ApiService api = RetrofitClient.getPrivateApiService(context);
         api.crearMensaje(finalRequest).enqueue(new Callback<Void>() {
             @Override
@@ -169,7 +173,6 @@ public class MainViewModel extends ViewModel {
                 isLoading.setValue(false);
                 if (response.isSuccessful()) {
                     Toast.makeText(context, "¡Mensaje enviado correctamente!", Toast.LENGTH_LONG).show();
-                    // Opcional: Limpiar selección
                 } else {
                     Toast.makeText(context, "Error al crear mensaje: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
