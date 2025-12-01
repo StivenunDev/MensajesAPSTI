@@ -1,9 +1,11 @@
 package com.nickdev.mensajesapsti.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-public class Mensaje {
+public class Mensaje implements Parcelable {
 
     @SerializedName("id")
     private int id;
@@ -66,5 +68,35 @@ public class Mensaje {
     // Helper para contar adjuntos
     public int getConteoAdjunto() {
         return adjuntos != null ? adjuntos.size() : 0;
+    }
+
+    // --- Implementación Parcelable ---
+    protected Mensaje(Parcel in) {
+        id = in.readInt();
+        titulo = in.readString();
+        cuerpo = in.readString();
+        fechaHora = in.readString();
+        // Lectura optimizada de lista tipada
+        adjuntos = in.createTypedArrayList(Adjunto.CREATOR);
+    }
+    public static final Creator<Mensaje> CREATOR = new Creator<Mensaje>() {
+        @Override
+        public Mensaje createFromParcel(Parcel in) { return new Mensaje(in); }
+
+        @Override
+        public Mensaje[] newArray(int size) { return new Mensaje[size]; }
+    };
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(titulo);
+        dest.writeString(cuerpo);
+        dest.writeString(fechaHora);
+        // Escritura optimizada de lista tipada
+        dest.writeTypedList(adjuntos);
     }
 }

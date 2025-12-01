@@ -42,22 +42,17 @@ public class Historial extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        // Ahora pasamos 'this::mostrarDetalle' como el segundo argumento (el listener)
-        adapter = new HistorialAdapter(new ArrayList<>(), mensaje -> {
-            // Acción al hacer clic: Abrir diálogo
-            mostrarDetalle(mensaje);
-        });
+        // Eliminamos el 'new ArrayList<>()' del constructor porque el adaptador inicia vacío internamente
+        adapter = new HistorialAdapter(this::mostrarDetalle);
 
         binding.rvHistorial.setLayoutManager(new LinearLayoutManager(this));
         binding.rvHistorial.setAdapter(adapter);
     }
 
     private void mostrarDetalle(Mensaje mensaje) {
-        // Convertimos el objeto mensaje a JSON para pasarlo al fragmento
-        // (Asegúrate de tener Gson importado, si no, usa otra forma de pasar datos)
-        String jsonMensaje = new com.google.gson.Gson().toJson(mensaje);
 
-        DialogoDetalleMensaje dialog = DialogoDetalleMensaje.newInstance(jsonMensaje);
+
+        DialogoDetalleMensaje dialog = DialogoDetalleMensaje.newInstance(mensaje);
         dialog.show(getSupportFragmentManager(), "DetalleMensaje");
     }
     private void cargarHistorial() {

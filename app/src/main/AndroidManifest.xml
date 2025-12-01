@@ -13,20 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MensajesAPSTI"
-
-
-        android:usesCleartextTraffic="true"> <!-- Tu endpoint "http://..." no es HTTPS. Android lo bloquea por defecto. -->
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.activity.Registro"
+            android:exported="false" />
+        <!-- Tu endpoint "http://..." no es HTTPS. Android lo bloquea por defecto. -->
         <!-- Añade esto para permitirlo durante las pruebas. -->
         <!-- Para producción, DEBES usar HTTPS. -->
-
-
-
         <activity
             android:name=".ui.activity.LauncherActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,26 +35,23 @@
             android:name=".ui.activity.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.activity.Historial"
             android:exported="false"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

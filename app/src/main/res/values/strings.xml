@@ -7,7 +7,7 @@
     <string name="email_hint">Email</string>
     <string name="password_hint">Contraseña</string>
     <string name="login_button">Iniciar sesión</string>
-    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="forgot_password">¿No tienes cuenta? Create una.</string>
     <string name="logo_description">Logo de la aplicación</string>
     <string name="login_success">Inicio de sesión exitoso</string>
     <string name="login_error">Email o contraseña incorrectos</string>

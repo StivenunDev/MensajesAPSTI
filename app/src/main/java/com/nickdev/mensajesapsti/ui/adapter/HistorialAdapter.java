@@ -5,31 +5,55 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil; // Importante
 import androidx.recyclerview.widget.RecyclerView;
 import com.nickdev.mensajesapsti.data.model.Mensaje;
 import com.nickdev.mensajesapsti.databinding.ItemMensajeBinding;
+import com.nickdev.mensajesapsti.util.DateUtils;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.ViewHolder> {
 
-    private List<Mensaje> mensajes;
-    private Context context;
+    private List<Mensaje> mensajes = new ArrayList<>();
     private final OnItemClickListener listener;
+    private Context context;
 
-    // Interfaz para comunicar el clic a la Actividad
     public interface OnItemClickListener {
         void onItemClick(Mensaje mensaje);
     }
 
-    // Constructor actualizado
-    public HistorialAdapter(List<Mensaje> mensajes, OnItemClickListener listener) {
-        this.mensajes = mensajes;
+    public HistorialAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+    // --- MÉTODO PROFESIONAL PARA ACTUALIZAR LISTAS ---
     public void updateList(List<Mensaje> nuevaLista) {
-        this.mensajes = nuevaLista;
-        notifyDataSetChanged();
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return mensajes.size(); }
+            @Override
+            public int getNewListSize() { return nuevaLista.size(); }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                // Comparamos IDs únicos para saber si es el mismo objeto
+                return mensajes.get(oldItemPosition).getId() == nuevaLista.get(newItemPosition).getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                // Comparamos contenido para saber si hubo cambios visuales
+                Mensaje oldMsg = mensajes.get(oldItemPosition);
+                Mensaje newMsg = nuevaLista.get(newItemPosition);
+                return oldMsg.getTitulo().equals(newMsg.getTitulo()) &&
+                        oldMsg.getCuerpo().equals(newMsg.getCuerpo());
+            }
+        });
+
+        this.mensajes.clear();
+        this.mensajes.addAll(nuevaLista);
+        diffResult.dispatchUpdatesTo(this); // Notifica solo lo que cambió
     }
 
     @NonNull
@@ -44,42 +68,34 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Mensaje mensaje = mensajes.get(position);
 
-        // 1. Asignar Título y Fecha
         holder.binding.tvTituloIM.setText(mensaje.getTitulo());
-        // Asegúrate de que tu modelo Mensaje tenga este método getter, si se llama diferente (ej: getFechaCreacion), ajústalo aquí.
-        // Si tu backend envía "creadoEn", es posible que necesites formatearlo o usar ese campo.
-        holder.binding.tvFechaIM.setText(mensaje.getFechaHora());
+        holder.binding.tvFechaIM.setText(DateUtils.formatearFecha(mensaje.getFechaHora()));
 
-        // 2. Lógica de Adjuntos Actualizada
-        // Verificamos el tamaño de la lista de objetos 'Adjunto'
-        int count = 0;
-        if (mensaje.getAdjuntos() != null) {
-            count = mensaje.getAdjuntos().size();
+        // Lógica segura de nulos
+        int count = (mensaje.getAdjuntos() != null) ? mensaje.getAdjuntos().size() : 0;
+        boolean hasAttachments = count > 0;
+
+        holder.binding.llyAttachments.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
+        // Usamos chequeo de nulidad seguro antes de acceder a vistas opcionales
+        if (holder.binding.llyAttachmentIcons != null) {
+            holder.binding.llyAttachmentIcons.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
         }
 
-        if (count > 0) {
-            holder.binding.llyAttachments.setVisibility(View.VISIBLE);
-            holder.binding.tvAttachmentCount.setText(count + (count == 1 ? " Archivo" : " Archivos"));
-            holder.binding.llyAttachmentIcons.setVisibility(View.VISIBLE);
-        } else {
-            holder.binding.llyAttachments.setVisibility(View.GONE);
-            holder.binding.llyAttachmentIcons.setVisibility(View.GONE);
+        if (hasAttachments) {
+            String label = context != null
+                    ? (count == 1 ? " Archivo" : " Archivos") // Podrías usar resources strings.xml
+                    : " Archivos";
+            holder.binding.tvAttachmentCount.setText(count + label);
         }
 
-        // 3. Ocultar checkbox (solo lectura)
-        holder.binding.cbIM.setVisibility(View.GONE);
-
-        // 4. Configurar el clic
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemClick(mensaje);
-            }
+            if (listener != null) listener.onItemClick(mensaje);
         });
     }
 
     @Override
     public int getItemCount() {
-        return mensajes != null ? mensajes.size() : 0;
+        return mensajes.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

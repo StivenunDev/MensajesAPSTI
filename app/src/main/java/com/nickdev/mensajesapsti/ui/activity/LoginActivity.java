@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);// Inicializar ViewModel
 
-
         // Configurar el listener del botón para llamar al ViewModel
         binding.btnLogin.setOnClickListener(v -> {
             hideKeyboard();
@@ -38,9 +37,13 @@ public class LoginActivity extends AppCompatActivity {
             String password = binding.txtPassword.getText().toString().trim();
             loginViewModel.login(email, password);
         });
-
-
         setupObservers();// Configurar los observadores que reaccionan a los cambios del ViewModel
+
+        binding.lblCrearCuenta.setOnClickListener(view -> {
+            // 3. Crear el Intent hacia RegistroActivity
+            Intent intent = new Intent(LoginActivity.this, Registro.class);
+            startActivity(intent);
+        });
     }
 
     private void setupObservers() {

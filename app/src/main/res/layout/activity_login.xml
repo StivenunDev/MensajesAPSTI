@@ -107,7 +107,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/lblOlvidoContraseña"
+        android:id="@+id/lblCrearCuenta"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autoSizeMaxTextSize="14sp"
@@ -115,7 +115,7 @@
         android:autoSizeTextType="uniform"
         android:text="@string/forgot_password"
         android:textAlignment="center"
-        android:textColor="@color/login_background"
+        android:textColor="#EA3F3F"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/loadingProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
